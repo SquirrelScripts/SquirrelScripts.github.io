@@ -18,7 +18,7 @@ _More nuts incoming._
 
 These are free and always will be. If one saved you a headache, you can toss a coffee in the jar:
 
-☕ **[Buy me a coffee](https://buymeacoffee.com/your-handle)** ← _swap in your real link_
+☕ **[Buy me a coffee](https://buymeacoffee.com/EBlank)**
 
 ---
 
