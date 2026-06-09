@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SquirrelScripts — a stash of helper scripts</title>
+<meta name="description" content="A stash of small, sharp PowerShell helper scripts for sysadmins. Grab one from the tree." />
+
+<!-- ============================================================= -->
+<!--  👇  EDIT THIS BLOCK. This is the only part you need to touch. -->
+<!-- ============================================================= -->
+<script>
+  // Your links
+  const GITHUB_URL = "https://github.com/your-username";
+  const BMAC_URL   = "https://buymeacoffee.com/your-handle";
+
+  // Your scripts. Add a repo = add one object. Delete the placeholders
+  // when you've got real ones. `status` is "live" or "soon".
+  const REPOS = [
+    {
+      name: "Invoke-Cleanup",
+      lang: "PowerShell",
+      status: "soon",
+      desc: "Nukes temp files, stale logs, and the junk Windows pretends isn't there. The flagship nut.",
+      url: "#"
+    },
+    {
+      name: "Get-StaleProfiles",
+      lang: "PowerShell",
+      status: "soon",
+      desc: "Finds user profiles nobody's logged into since the last reorg. Reclaim the disk.",
+      url: "#"
+    },
+    {
+      name: "Reset-Spooler",
+      lang: "PowerShell",
+      status: "soon",
+      desc: "The print spooler died again. This fixes it before the ticket lands.",
+      url: "#"
+    }
+  ];
+</script>
+<!-- ============================================================= -->
+<!--  👆  STOP EDITING. The rest is styling + wiring.              -->
+<!-- ============================================================= -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bark:    #1b1510;
+    --bark-2:  #241c14;
+    --surface: #2c2218;
+    --surface-hi: #34291d;
+    --line:    #44342233;
+    --parch:   #f2e8d5;
+    --taupe:   #ab9678;
+    --amber:   #f0a830;
+    --rust:    #c4603a;
+    --moss:    #9aab5e;
+    --r: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bark);
+    color: var(--parch);
+    font-family: "Hanken Grotesk", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(60rem 40rem at 80% -10%, #3a2c1b55, transparent),
+      radial-gradient(50rem 40rem at -10% 20%, #2e231640, transparent);
+    background-attachment: fixed;
+  }
+
+  .wrap { width: min(1040px, 92vw); margin-inline: auto; }
+
+  .mono {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--taupe);
+  }
+
+  /* ---------- top bar ---------- */
+  header {
+    position: sticky; top: 0; z-index: 20;
+    backdrop-filter: blur(10px);
+    background: #1b1510cc;
+    border-bottom: 1px solid var(--line);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: "Bricolage Grotesque"; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; }
+  .brand .nut { font-size: 1.3rem; transform: translateY(-1px); }
+  .bar nav { display: flex; gap: 22px; align-items: center; }
+  .bar nav a { color: var(--taupe); text-decoration: none; font-size: 0.92rem; transition: color .2s; }
+  .bar nav a:hover { color: var(--parch); }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 90px 0 64px; }
+  .eyebrow { color: var(--amber); }
+  .hero h1 {
+    font-family: "Bricolage Grotesque";
+    font-weight: 800;
+    font-size: clamp(2.8rem, 8vw, 5.2rem);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    margin: 14px 0 18px;
+  }
+  .hero h1 .nut { font-size: 0.8em; }
+  .hero p.lede {
+    font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+    color: var(--parch);
+    max-width: 36ch;
+    margin-bottom: 30px;
+  }
+  .hero p.lede b { color: var(--amber); font-weight: 600; }
+
+  /* terminal block */
+  .term {
+    background: var(--bark-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    overflow: hidden;
+    max-width: 560px;
+    box-shadow: 0 24px 60px -30px #000;
+    margin-bottom: 34px;
+  }
+  .term .top { display: flex; gap: 7px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  .term .top i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .term .top i:nth-child(1){ background:#c4603a; }
+  .term .top i:nth-child(2){ background:#f0a830; }
+  .term .top i:nth-child(3){ background:#9aab5e; }
+  .term .body { padding: 18px 16px 20px; font-family: "JetBrains Mono", monospace; font-size: 0.86rem; line-height: 1.9; }
+  .term .prompt { color: var(--moss); }
+  .term .cmd { color: var(--parch); }
+  .term .out { color: var(--taupe); }
+  .term .out b { color: var(--amber); font-weight: 700; }
+  .caret { display: inline-block; width: 9px; background: var(--amber); margin-left: 2px; animation: blink 1.05s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 14px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: "JetBrains Mono", monospace; font-weight: 500; font-size: 0.9rem;
+    padding: 13px 22px; border-radius: 10px; text-decoration: none;
+    border: 1px solid transparent; cursor: pointer; transition: transform .15s ease, background .2s, border-color .2s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--amber); color: #1b1510; font-weight: 700; }
+  .btn-primary:hover { background: #ffc056; }
+  .btn-ghost { background: transparent; color: var(--parch); border-color: #54402a; }
+  .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* ---------- stash ---------- */
+  section.stash { padding: 40px 0 30px; }
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
+  .sec-head h2 {
+    font-family: "Bricolage Grotesque"; font-weight: 800; font-size: clamp(1.8rem, 4vw, 2.6rem);
+    letter-spacing: -0.03em;
+  }
+  .sec-head .count { color: var(--taupe); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    padding: 22px 22px 20px;
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column; gap: 12px;
+    transition: transform .18s ease, border-color .2s, background .2s;
+    opacity: 0; transform: translateY(14px);
+  }
+  .card.in { opacity: 1; transform: none; }
+  .card:hover { transform: translateY(-4px); border-color: #5a4327; background: var(--surface-hi); }
+  .card .row1 { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .card h3 { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 1.04rem; color: var(--parch); letter-spacing: -0.01em; }
+  .pill { font-family: "JetBrains Mono", monospace; font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+  .pill.live { color: var(--moss); background: #9aab5e1a; border: 1px solid #9aab5e44; }
+  .pill.soon { color: var(--amber); background: #f0a8301a; border: 1px solid #f0a83044; }
+  .card .desc { color: var(--taupe); font-size: 0.96rem; line-height: 1.5; flex: 1; }
+  .card .lang { display: flex; align-items: center; gap: 7px; color: var(--taupe); }
+  .card .lang::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--rust); }
+  .card .go { font-family: "JetBrains Mono", monospace; font-size: 0.82rem; color: var(--amber); margin-top: 2px; }
+  .card[data-soon="true"] { cursor: default; }
+  .card[data-soon="true"]:hover { transform: none; }
+  .card[data-soon="true"] .go { color: var(--taupe); }
+
+  /* ---------- support ---------- */
+  section.support { padding: 70px 0 40px; }
+  .support-box {
+    background: linear-gradient(135deg, #2c2218, #241c14);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: clamp(28px, 5vw, 48px);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .support-box .big-nut { font-size: clamp(3rem, 9vw, 5rem); display: block; margin-bottom: 6px; }
+  .support-box h2 { font-family: "Bricolage Grotesque"; font-weight: 800; font-size: clamp(1.6rem, 4vw, 2.3rem); letter-spacing: -0.03em; }
+  .support-box p { color: var(--taupe); max-width: 44ch; margin: 12px auto 26px; }
+  .bmac { background: var(--rust); color: var(--parch); font-weight: 700; }
+  .bmac:hover { background: #d96f48; }
+
+  /* ---------- footer ---------- */
+  footer { border-top: 1px solid var(--line); padding: 30px 0 50px; margin-top: 30px; }
+  .foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .foot a { color: var(--taupe); text-decoration: none; }
+  .foot a:hover { color: var(--amber); }
+
+  @media (max-width: 560px) {
+    .bar nav a:not(.gh) { display: none; }
+    .hero { padding-top: 64px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .card { opacity: 1; transform: none; }
+    .caret { animation: none; }
+    .btn:hover, .card:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="brand"><span class="nut">🐿️</span> SquirrelScripts</div>
+    <nav>
+      <a href="#stash">The stash</a>
+      <a href="#support">Support</a>
+      <a class="gh" id="nav-gh" href="#" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="mono eyebrow">// small scripts, fewer tickets</div>
+    <h1>A stash of<br>helper scripts <span class="nut">🐿️</span></h1>
+    <p class="lede">Little <b>PowerShell</b> tools for the stuff that breaks at 4:45 on a Friday. Grab one, run it, get on with your life.</p>
+
+    <div class="term" aria-hidden="true">
+      <div class="top"><i></i><i></i><i></i></div>
+      <div class="body">
+        <div><span class="prompt">PS C:\&gt;</span> <span class="cmd" id="typed"></span><span class="caret">&nbsp;</span></div>
+        <div class="out" id="termout" style="opacity:0"></div>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#stash">Browse the stash</a>
+      <a class="btn btn-ghost" id="hero-gh" href="#" target="_blank" rel="noopener">⌥ View on GitHub</a>
+    </div>
+  </section>
+
+  <!-- STASH -->
+  <section class="stash" id="stash">
+    <div class="sec-head">
+      <h2>The stash</h2>
+      <span class="mono count" id="count"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- SUPPORT -->
+  <section class="support" id="support">
+    <div class="support-box">
+      <span class="big-nut">🌰</span>
+      <h2>Keep the squirrel caffeinated</h2>
+      <p>These are free and always will be. If one saved you a headache, you can toss a coffee in the jar.</p>
+      <a class="btn bmac" id="bmac" href="#" target="_blank" rel="noopener">☕ Buy me a coffee</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="mono">© <span id="year"></span> SquirrelScripts</span>
+    <span class="mono">built in a tree · <a id="foot-gh" href="#" target="_blank" rel="noopener">github</a></span>
+  </div>
+</footer>
+
+<script>
+  // ---- wire links ----
+  document.querySelectorAll('#nav-gh, #hero-gh, #foot-gh').forEach(a => a.href = GITHUB_URL);
+  document.getElementById('bmac').href = BMAC_URL;
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- render the stash ----
+  const grid = document.getElementById('grid');
+  const liveCount = REPOS.filter(r => r.status === 'live').length;
+  document.getElementById('count').textContent =
+    `${REPOS.length} script${REPOS.length === 1 ? '' : 's'} · ${liveCount} live`;
+
+  REPOS.forEach(r => {
+    const soon = r.status === 'soon';
+    const el = document.createElement(soon ? 'div' : 'a');
+    el.className = 'card';
+    el.dataset.soon = soon;
+    if (!soon) { el.href = r.url; el.target = '_blank'; el.rel = 'noopener'; }
+    el.innerHTML = `
+      <div class="row1">
+        <h3>${r.name}</h3>
+        <span class="pill ${soon ? 'soon' : 'live'}">${soon ? 'soon' : 'live'}</span>
+      </div>
+      <div class="desc">${r.desc}</div>
+      <div class="lang mono">${r.lang}</div>
+      <div class="go">${soon ? 'gathering nuts…' : 'View on GitHub →'}</div>`;
+    grid.appendChild(el);
+  });
+
+  // ---- reveal on scroll ----
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    document.querySelectorAll('.card').forEach(c => c.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('in'), i * 80);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.card').forEach(c => io.observe(c));
+  }
+
+  // ---- type the hero command ----
+  const cmd = "Get-SquirrelStash";
+  const typedEl = document.getElementById('typed');
+  const outEl = document.getElementById('termout');
+  if (reduce) {
+    typedEl.textContent = cmd;
+    outEl.textContent = `Found ${REPOS.length} scripts in the tree.`;
+    outEl.innerHTML = `Found <b>${REPOS.length}</b> scripts in the tree. 🐿️`;
+    outEl.style.opacity = 1;
+  } else {
+    let i = 0;
+    (function type() {
+      if (i <= cmd.length) {
+        typedEl.textContent = cmd.slice(0, i++);
+        setTimeout(type, 55);
+      } else {
+        setTimeout(() => {
+          outEl.innerHTML = `Found <b>${REPOS.length}</b> scripts in the tree. 🐿️`;
+          outEl.style.transition = 'opacity .4s';
+          outEl.style.opacity = 1;
+        }, 280);
+      }
+    })();
+  }
+</script>
+
+</body>
+</html>
