@@ -10,7 +10,7 @@ This repo is just the landing page (`index.html`). The actual tools each live in
 
 | Tool | What it does | Status |
 |------|--------------|--------|
-| **SquirrelCleaner** | Quick Windows cache cleaner. One run, MBs back. | 🌰 coming soon |
+| **SquirrelCleaner** | Quick Windows cache cleaner. One run, MBs back. | 🌰 live |
 
 _More nuts incoming._
 
