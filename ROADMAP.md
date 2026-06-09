@@ -1,0 +1,67 @@
+# SquirrelScripts — Roadmap 🐿️
+
+> A small, trusted stash of Windows tools sysadmins actually reach for. Quality over quantity — every script earns its card or it doesn't ship.
+
+---
+
+## The squirrel rules
+
+Non-negotiables. A tool that breaks one of these isn't a SquirrelScript.
+
+1. **Preview before the deed.** Default to `-WhatIf` / a dry run. People should always see what a tool *will* do before it does it. This is the signature — it's what separates the stash from an AI-generated script dump.
+2. **Never hurt the user.** Safe defaults, reversible where possible, no force-closing apps, no destructive surprises. Touch only what regenerates.
+3. **Satisfying finish.** End with the number — `Freed 2.3 GB`, `Found 14 stale accounts`. The flush moment.
+4. **Single file, low friction.** One `.ps1`, no dependencies, no admin for the default path where it's avoidable. Runs straight off a download (with `Unblock-File`).
+5. **Maintained beats many.** Cap the stash around 10–15. If it can't be kept working, it doesn't belong on the shelf.
+
+---
+
+## The stash
+
+### ✅ Shipped
+- **SquirrelCleaner** — quick Windows cache cleaner. User temp + browser caches by default, opt-in system/Windows Update/recycle bin. `-WhatIf` first, won't kill your browser.
+
+### 🔜 Next up — *free lane* (build these next, same lane as the cleaner)
+
+- [ ] **Disk-Hog Finder**  _(suggested: `Get-SquirrelHogs`)_
+  - **What:** Reports drive free space, biggest folders, and the top-N largest files.
+  - **Why it matters:** Perennial "disk full, where'd it go?" pain — happens weekly.
+  - **Safety angle:** Read-only. Reports, never deletes. The trust story is free — pairs with the cleaner (find hogs → clean).
+  - **Priority:** High. This is tool #2.
+
+- [ ] **Network Repair Kit**  _(suggested: `Repair-SquirrelNet`)_
+  - **What:** Flush DNS, reset Winsock, rebuild TCP/IP stack, renew DHCP, restart DNS client.
+  - **Why it matters:** The "my internet's borked" Friday fix, in one command.
+  - **Safety angle:** Staged and reversible. Show each step, capture state first, stop early if a step fixes it — don't blindly nuke Winsock (it can break VPNs / security agents). The careful version *is* the differentiator.
+  - **Priority:** High. Tool #3.
+
+### 🤔 Maybe / smaller
+- [ ] **Targeted cache nuke** — Teams/Outlook "app won't load, clear its cache." Useful, but probably a *mode* of SquirrelCleaner rather than its own card. Revisit.
+- [ ] **Windows debloat / fresh-install setup** — high traffic but crowded (Win11Debloat et al.) and higher risk. Only worth it as the safe, reversible, preview-first take. Park it.
+
+### 🔒 Later — *paid lane* (the module / upsell, not day-one free)
+Higher value, different audience (AD / M365 admins), more maintenance, needs a domain or tenant to test. This is where people actually pay — lifecycle packs sell for $15–$49. Save these for the "install the whole stash" module.
+
+- [ ] **Stale/Inactive AD Account Finder + Disabler** — `Search-ADAccount -AccountInactive` → report, then optionally disable (with `-WhatIf`, naturally). Security + compliance value, recurring.
+- [ ] **User Offboarding (AD + M365)** — disable account, reset password, strip groups, convert mailbox to shared, revoke sessions. The single most-requested and most-monetized of the bunch. Flagship paid candidate.
+- [ ] **Fleet hygiene (Intune / Autopilot / stale devices)** — cloud-managed cleanup. Pure MSP/paid territory.
+
+---
+
+## Build order
+
+1. ~~SquirrelCleaner~~ ✅
+2. Disk-Hog Finder
+3. Network Repair Kit
+
+Three solid, safe, Reddit-friendly tools — none needing a domain to test — before touching anything else. Nail those, then reassess. The AD/M365 lane waits until the free stash has traction and there's a reason to build the paid module.
+
+---
+
+## Free vs paid, in one line
+
+The free scripts are the lure — single tools that solve one painful thing and build trust. The paid module is the *curated, ready, supported* pack. The code was never the moat; the curation and the trust are. Lead every tool with the preview-first safety story and the brand reads as trustworthy on sight.
+
+---
+
+<sub>Part of [SquirrelScripts](https://squirrelscripts.github.io) · Built in a tree.</sub>
