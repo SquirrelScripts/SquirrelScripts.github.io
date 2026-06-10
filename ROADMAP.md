@@ -21,14 +21,11 @@ Non-negotiables. A tool that breaks one of these isn't a SquirrelScript.
 ### ✅ Shipped
 - **SquirrelCleaner** — quick Windows cache cleaner. User temp + browser caches by default, opt-in system/Windows Update/recycle bin. `-WhatIf` first, won't kill your browser.
 - **Disk-Hog Finder** (`Get-SquirrelHogs`) — drive free space, biggest folders, top-N largest files. Read-only — reports, never deletes. Junction- and OneDrive-aware so the numbers are honest. Pairs with the cleaner (find hogs → clean).
+- **Network Repair Kit** (`Repair-SquirrelNet`) — diagnoses first, then a gentlest-first repair ladder (DNS flush → re-register → DHCP renew → adapter restart), re-testing after each step and stopping the moment it's back. Winsock/TCP-IP resets opt-in via `-Deep` with explicit warnings; state snapshotted to a receipts file before anything runs.
 
 ### 🔜 Next up — *free lane* (build these next, same lane as the cleaner)
 
-- [ ] **Network Repair Kit**  _(suggested: `Repair-SquirrelNet`)_
-  - **What:** Flush DNS, reset Winsock, rebuild TCP/IP stack, renew DHCP, restart DNS client.
-  - **Why it matters:** The "my internet's borked" Friday fix, in one command.
-  - **Safety angle:** Staged and reversible. Show each step, capture state first, stop early if a step fixes it — don't blindly nuke Winsock (it can break VPNs / security agents). The careful version *is* the differentiator.
-  - **Priority:** High. Tool #3.
+Free lane complete — all three shipped. Reassess here: nail the existing three, gather feedback/traction, then decide between the "maybe" items and the paid lane.
 
 ### 🤔 Maybe / smaller
 - [ ] **Targeted cache nuke** — Teams/Outlook "app won't load, clear its cache." Useful, but probably a *mode* of SquirrelCleaner rather than its own card. Revisit.
@@ -47,7 +44,7 @@ Higher value, different audience (AD / M365 admins), more maintenance, needs a d
 
 1. ~~SquirrelCleaner~~ ✅
 2. ~~Disk-Hog Finder~~ ✅
-3. Network Repair Kit
+3. ~~Network Repair Kit~~ ✅
 
 Three solid, safe, Reddit-friendly tools — none needing a domain to test — before touching anything else. Nail those, then reassess. The AD/M365 lane waits until the free stash has traction and there's a reason to build the paid module.
 
