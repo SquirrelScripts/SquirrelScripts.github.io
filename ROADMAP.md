@@ -20,14 +20,9 @@ Non-negotiables. A tool that breaks one of these isn't a SquirrelScript.
 
 ### ✅ Shipped
 - **SquirrelCleaner** — quick Windows cache cleaner. User temp + browser caches by default, opt-in system/Windows Update/recycle bin. `-WhatIf` first, won't kill your browser.
+- **Disk-Hog Finder** (`Get-SquirrelHogs`) — drive free space, biggest folders, top-N largest files. Read-only — reports, never deletes. Junction- and OneDrive-aware so the numbers are honest. Pairs with the cleaner (find hogs → clean).
 
 ### 🔜 Next up — *free lane* (build these next, same lane as the cleaner)
-
-- [ ] **Disk-Hog Finder**  _(suggested: `Get-SquirrelHogs`)_
-  - **What:** Reports drive free space, biggest folders, and the top-N largest files.
-  - **Why it matters:** Perennial "disk full, where'd it go?" pain — happens weekly.
-  - **Safety angle:** Read-only. Reports, never deletes. The trust story is free — pairs with the cleaner (find hogs → clean).
-  - **Priority:** High. This is tool #2.
 
 - [ ] **Network Repair Kit**  _(suggested: `Repair-SquirrelNet`)_
   - **What:** Flush DNS, reset Winsock, rebuild TCP/IP stack, renew DHCP, restart DNS client.
@@ -51,7 +46,7 @@ Higher value, different audience (AD / M365 admins), more maintenance, needs a d
 ## Build order
 
 1. ~~SquirrelCleaner~~ ✅
-2. Disk-Hog Finder
+2. ~~Disk-Hog Finder~~ ✅
 3. Network Repair Kit
 
 Three solid, safe, Reddit-friendly tools — none needing a domain to test — before touching anything else. Nail those, then reassess. The AD/M365 lane waits until the free stash has traction and there's a reason to build the paid module.
