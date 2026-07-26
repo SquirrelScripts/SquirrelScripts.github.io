@@ -47,13 +47,15 @@ Higher value, different audience (AD / M365 admins), more maintenance, needs a d
 Bigger builds — full apps, not single scripts. Different shape, same trust story: rule 4 gets rewritten (an app is an install, not a download-and-run `.ps1`), but low friction still means no runtime to chase and no account to create before it does something useful. Everything else holds.
 
 ### 🔨 In progress
-- **LogHunter** (.NET) — a log viewer with AI on top. Open a gnarly log, and it surfaces the errors that actually matter and explains, in plain English, what broke. The pitch is Event Viewer's job done properly: the pain isn't reading one log line, it's finding it.
+- **LogHunter** (.NET) — **free.** A generic log viewer and analyzer, opening with a focus on MSI installer logs — the 40,000-line `msiexec` dumps where the one line that matters is buried a thousand rows from the failure. Generic by design: MSI is the first target, not the limit.
 
-**Open questions** — worth settling before much code gets written:
-- **Which logs?** Windows Event Log only, or flat files / IIS / app logs too? Event Log is the tightest story and the obvious pairing with the stash; flat files widen the audience a lot.
-- **Where does the AI run?** Local model vs. hosted API changes the privacy pitch, the cost model, and the install size. Logs are sensitive by nature — "your logs stay on your machine" is a strong differentiator if it's affordable, and a rule 2 question either way.
-- **Does it work with the AI off?** Recommend yes. If it's a decent viewer on its own, the AI is an assist rather than a dependency — and it degrades gracefully when the key's missing or the model's down.
-- **Free or paid?** First real candidate for the paid lane that doesn't need a domain or tenant to test, which makes it a much easier thing to build and sell than the AD/M365 pack.
+  **Settled:**
+  - Not tied to Event Viewer or any one format. MSI logs are the initial focus because they're the worst offender and the easiest audience to name.
+  - Non-AI analysis is a first-class feature, not a fallback. The app has to be genuinely useful with AI switched off entirely.
+  - AI is an optional assist. Local *and* cloud LLMs both supported — bring your own, or don't bring one at all.
+  - Free. Not a paid-lane candidate.
+
+  Feature set is still growing — more to come.
 
 ---
 
@@ -64,7 +66,7 @@ Bigger builds — full apps, not single scripts. Different shape, same trust sto
 3. ~~Network Repair Kit~~ ✅
 4. **LogHunter** 🔨 — first app, first thing in the workshop.
 
-Three solid, safe, Reddit-friendly tools — none needing a domain to test — before touching anything else. That's done, and LogHunter is the next build: a bigger swing than a script, but still testable on one machine with no domain or tenant. The AD/M365 lane waits until the free stash has traction and there's a reason to build the paid module.
+Three solid, safe, Reddit-friendly tools — none needing a domain to test — before touching anything else. That's done, and LogHunter is the next build: a bigger swing than a script, but still free and still testable on one machine with no domain or tenant. The AD/M365 lane waits until the free stash has traction and there's a reason to build the paid module.
 
 ---
 
@@ -72,7 +74,7 @@ Three solid, safe, Reddit-friendly tools — none needing a domain to test — b
 
 The free scripts are the lure — single tools that solve one painful thing and build trust. The paid module is the *curated, ready, supported* pack. The code was never the moat; the curation and the trust are. Lead every tool with the preview-first safety story and the brand reads as trustworthy on sight.
 
-Apps sit somewhere else on that line: a script is a favour, an app is a product. LogHunter is the first test of whether the trust the stash earned carries over to something people install — and possibly pay for.
+Script vs. app is a *shape* distinction, not a pricing one — the two axes are independent, and where apps land on the paid side isn't settled. LogHunter is free, and its job is the same as the stash's: solve one painful thing well enough that people come look at the rest of the tree.
 
 ---
 
