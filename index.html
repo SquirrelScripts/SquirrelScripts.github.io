@@ -38,11 +38,14 @@
   ];
 
   // Bigger builds — full apps, not single scripts. Same shape, same statuses.
+  // `peek: true` makes a "soon" card clickable — only set it once the repo is
+  // PUBLIC, or the card links visitors straight into a 404.
   const APPS = [
     {
       name: "LogHunter",
       lang: ".NET",
       status: "soon",
+      peek: true,
       desc: "Install failed at 97%? Sniffs through the log and points at the line that actually broke it. MSI logs first, any log eventually. AI assist optional — local, cloud, or none at all.",
       url: "https://github.com/SquirrelScripts/LogHunter"
     }
@@ -196,9 +199,11 @@
   .card .lang { display: flex; align-items: center; gap: 7px; color: var(--taupe); }
   .card .lang::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--rust); }
   .card .go { font-family: "JetBrains Mono", monospace; font-size: 0.82rem; color: var(--amber); margin-top: 2px; }
-  .card[data-soon="true"] { cursor: default; }
-  .card[data-soon="true"]:hover { transform: none; }
+  /* soon cards are inert unless they link somewhere worth going */
+  .card[data-soon="true"]:not([href]) { cursor: default; }
+  .card[data-soon="true"]:not([href]):hover { transform: none; }
   .card[data-soon="true"] .go { color: var(--taupe); }
+  .card[data-soon="true"][href] .go { color: var(--amber); }
 
   /* ---------- support ---------- */
   section.support { padding: 70px 0 40px; }
@@ -319,10 +324,12 @@
   function renderCards(items, gridEl, soonLabel) {
     items.forEach(r => {
       const soon = r.status === 'soon';
-      const el = document.createElement(soon ? 'div' : 'a');
+      // soon cards stay inert unless `peek` says the repo is public and worth a look
+      const linked = r.url && (!soon || r.peek);
+      const el = document.createElement(linked ? 'a' : 'div');
       el.className = 'card';
       el.dataset.soon = soon;
-      if (!soon) { el.href = r.url; el.target = '_blank'; el.rel = 'noopener'; }
+      if (linked) { el.href = r.url; el.target = '_blank'; el.rel = 'noopener'; }
       el.innerHTML = `
         <div class="row1">
           <h3>${r.name}</h3>
@@ -330,7 +337,7 @@
         </div>
         <div class="desc">${r.desc}</div>
         <div class="lang mono">${r.lang}</div>
-        <div class="go">${soon ? soonLabel : 'View on GitHub →'}</div>`;
+        <div class="go">${!soon ? 'View on GitHub →' : (linked ? 'Peek at the build →' : soonLabel)}</div>`;
       gridEl.appendChild(el);
     });
   }
