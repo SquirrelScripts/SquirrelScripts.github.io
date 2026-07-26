@@ -34,12 +34,16 @@
       status: "live",
       desc: "Internet borked? Fixes it one careful step at a time — and stops the moment it's back. No blind Winsock nuking.",
       url: "https://github.com/SquirrelScripts/NetworkRepairKit"
-    },
+    }
+  ];
+
+  // Bigger builds — full apps, not single scripts. Same shape, same statuses.
+  const APPS = [
     {
-      name: "Find-SquirrelLogs",
-      lang: "PowerShell",
+      name: "LogHunter",
+      lang: ".NET",
       status: "soon",
-      desc: "\"What broke?\" Digs through the event logs and surfaces the errors that matter, minus the noise. Event Viewer, but bearable.",
+      desc: "A log viewer with a bloodhound's nose. Open a gnarly log and the AI sniffs out the errors that matter — then tells you, in plain English, what broke.",
       url: "https://github.com/SquirrelScripts/LogHunter"
     }
   ];
@@ -238,6 +242,7 @@
     <div class="brand"><span class="nut">🐿️</span> SquirrelScripts</div>
     <nav>
       <a href="#stash">The stash</a>
+      <a href="#workshop">The workshop</a>
       <a href="#support">Support</a>
       <a href="https://squirrelscripts.github.io/Familia/">Family tree 🌳</a>
       <a class="gh" id="nav-gh" href="#" target="_blank" rel="noopener">GitHub ↗</a>
@@ -276,6 +281,15 @@
     <div class="grid" id="grid"></div>
   </section>
 
+  <!-- WORKSHOP (apps) -->
+  <section class="stash" id="workshop">
+    <div class="sec-head">
+      <h2>The workshop</h2>
+      <span class="mono count" id="app-count"></span>
+    </div>
+    <div class="grid" id="app-grid"></div>
+  </section>
+
   <!-- SUPPORT -->
   <section class="support" id="support">
     <div class="support-box">
@@ -301,28 +315,36 @@
   document.getElementById('bmac').href = BMAC_URL;
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ---- render the stash ----
-  const grid = document.getElementById('grid');
-  const liveCount = REPOS.filter(r => r.status === 'live').length;
-  document.getElementById('count').textContent =
-    `${REPOS.length} script${REPOS.length === 1 ? '' : 's'} · ${liveCount} live`;
+  // ---- render the stash + workshop ----
+  function renderCards(items, gridEl, soonLabel) {
+    items.forEach(r => {
+      const soon = r.status === 'soon';
+      const el = document.createElement(soon ? 'div' : 'a');
+      el.className = 'card';
+      el.dataset.soon = soon;
+      if (!soon) { el.href = r.url; el.target = '_blank'; el.rel = 'noopener'; }
+      el.innerHTML = `
+        <div class="row1">
+          <h3>${r.name}</h3>
+          <span class="pill ${soon ? 'soon' : 'live'}">${soon ? 'soon' : 'live'}</span>
+        </div>
+        <div class="desc">${r.desc}</div>
+        <div class="lang mono">${r.lang}</div>
+        <div class="go">${soon ? soonLabel : 'View on GitHub →'}</div>`;
+      gridEl.appendChild(el);
+    });
+  }
 
-  REPOS.forEach(r => {
-    const soon = r.status === 'soon';
-    const el = document.createElement(soon ? 'div' : 'a');
-    el.className = 'card';
-    el.dataset.soon = soon;
-    if (!soon) { el.href = r.url; el.target = '_blank'; el.rel = 'noopener'; }
-    el.innerHTML = `
-      <div class="row1">
-        <h3>${r.name}</h3>
-        <span class="pill ${soon ? 'soon' : 'live'}">${soon ? 'soon' : 'live'}</span>
-      </div>
-      <div class="desc">${r.desc}</div>
-      <div class="lang mono">${r.lang}</div>
-      <div class="go">${soon ? 'gathering nuts…' : 'View on GitHub →'}</div>`;
-    grid.appendChild(el);
-  });
+  function countLabel(items, noun) {
+    const live = items.filter(r => r.status === 'live').length;
+    const n = `${items.length} ${noun}${items.length === 1 ? '' : 's'}`;
+    return live ? `${n} · ${live} live` : `${n} · in the works`;
+  }
+
+  renderCards(REPOS, document.getElementById('grid'), 'gathering nuts…');
+  renderCards(APPS, document.getElementById('app-grid'), 'on the workbench…');
+  document.getElementById('count').textContent = countLabel(REPOS, 'script');
+  document.getElementById('app-count').textContent = countLabel(APPS, 'app');
 
   // ---- reveal on scroll ----
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
